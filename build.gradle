@@ -1,0 +1,47 @@
+apply plugin: 'java'
+
+repositories {
+    // for local libs
+    // example dep. for "./libs/lombok-edge.jar": compileOnly name: 'lombok-edge'
+//    flatDir { dirs 'libs' }
+
+    // Spring - early
+    maven { url 'http://repo.spring.io/libs-milestone' }
+    maven { url 'http://repo.spring.io/libs-release' }
+
+    mavenLocal()
+    mavenCentral()
+    jcenter() // BinTray
+
+    // From GitHub
+//    maven { url 'https://jitpack.io' }
+}
+
+configurations {
+    testCompile.extendsFrom compileOnly
+}
+
+// this turns logging on in tests:
+test.testLogging.showStandardStreams = true
+
+dependencies {
+    compile 'org.springframework:spring-context:+',
+            'org.apache.logging.log4j:log4j-core:+',
+            'io.vavr:vavr:+'
+
+    compileOnly 'org.projectlombok:lombok:+',
+            'edu.washington.cs.types.checker:checker-framework:+'
+
+    testCompile 'org.junit.jupiter:junit-jupiter-api:+',
+            'org.hamcrest:java-hamcrest:+',
+            'org.springframework:spring-test:+',
+            'org.mockito:mockito-core:+'
+}
+
+// type in terminal: ./gradlew wrapper --gradle-version=4.2
+task Wrapper(type: Wrapper) {
+    description = 'Generates gradlew[.bat] scripts'
+    gradleVersion = '4.2'
+    distributionUrl = "https://services.gradle.org/distributions/gradle-$gradleVersion-all.zip"
+}
+
